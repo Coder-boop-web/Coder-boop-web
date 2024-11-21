@@ -162,11 +162,8 @@ jobs:
           make html
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/_build/html
-          publish_branch: gh-pages
+        id: deployment
+        uses: actions/deploy-pages@v4
 
       - name: Notify Deployment Success
         run: echo "Deployment to GitHub Pages completed successfully!"
