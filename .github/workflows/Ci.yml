@@ -134,7 +134,7 @@ jobs:
       - name: Create Output Directory
         run: mkdir -p out
 
-      - name: Build - name: Build Project
+      - name: Build Project
         run: |
           # Add your build commands here
           echo "Building the project..."
