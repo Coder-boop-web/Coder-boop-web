@@ -1,158 +1,74 @@
-# This CI workflow is from Andrewshin-7th-technology-student/build-CI. 
-# Workflows from the project are considered as "forked".
-name: CI
+    name: Building JavaScript
+    run: |
+      # Set up Emscripten environment
+      source /opt/emsdk/emsdk_env.sh
+      
+      # Navigate to the directory containing the source code
+      cd ./test/text
+      
+      # Compile the source code to WebAssembly
+      emcc your_source_file.cpp -o output.js -s WASM=1
+      
+      # Check if the build was successful
+      if [ $? -eq 0 ]; then
+        echo "Build succeeded!"
+      else
+        echo "Build failed!"
+        exit 1
+      fi
+      
+      # Move the output files to the designated output directory
+      mv output.js ../out/
+      mv output.wasm ../out/
 
-on:
-  create:
-    tags:
-  push:
-    branches:
-      - main
-  pull_request:
-
-permissions:
-  contents: write
-  pages: write
-
-env:
-  DEVELOPER: 4
-
-concurrency:
-  group: ${{ github.sha }}
-
-jobs:
-  lint:
-    name: Checkout/Node.js
+  test:
+    name: Run Tests
     runs-on: ubuntu-latest
-    environment: 'Development'
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
-          path: ./test/text
-          submodules: recursive
-      - name: Set up Python
+          path: ./test
+          submodules: true
+          
+      - name: Set up Python for testing
         uses: actions/setup-python@v4
         with:
-          path: ./test
-          python-version: "3.11"
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          path: ./test
-          node-version: ${{ matrix.node }}
-          architecture: ${{ matrix.arch }} 
-      - uses: actions/setup-python@v5
-        with:
           python-version: '3.x'
-      - uses: actions/checkout@v4
-
-  ci-config:
-    name: Configure linux arch 
-    if: vars.CI_BRANCHES == '' || contains(vars.CI_BRANCHES, github.ref_name)
-    runs-on: ubuntu-latest
-    outputs:
-      enabled: ${{ steps.check-ref.outputs.enabled }}${{ steps.skip-if-redundant.outputs.enabled }}
-      skip_concurrent: ${{ steps.check-ref.outputs.skip_concurrent }}
-    steps:
-      - name: try to clone ci-config branch
+          
+      - name: Install Dependencies
         run: |
-          git -c protocol.version=2 clone \
-            --no-tags \
-            --single-branch \
-            -b ci-config \
-            --depth 1 \
-            --no-checkout \
-            --filter=blob:none \
-            https://github.com/${{ github.repository }} \
-            config-repo &&
-          cd config-repo &&
-          git checkout HEAD -- ci/config || true
-      - id: check-ref
-        name: check whether CI is enabled for ref
+          pip install -r requirements.txt
+          
+      - name: Run Unit Tests
         run: |
-          enabled=yes
-          if test -x config-repo/ci/config/allow-ref
-          then
-            echo "::warning::ci/config/allow-ref is deprecated; use CI_BRANCHES instead"
-            if ! config-repo/ci/config/allow-ref '${{ github.ref }}'
-            then
-              enabled=no
-            fi
-          fi
+          python -m unittest discover -s tests -p "*.py"
+          
+      - name: Run JavaScript Tests
+        run: |
+          npm install
+          npm test
 
-          skip_concurrent=yes
-          if test -x config-repo/ci/config/skip-concurrent &&
-             ! config-repo/ci/config/skip-concurrent '${{ github.ref }}'
-          then
-            skip_concurrent=no
-          fi
-          echo "enabled=$enabled" >>$GITHUB_OUTPUT
-          echo "skip_concurrent=$skip_concurrent" >>$GITHUB_OUTPUT
-      - name: skip if the commit or tree was already tested
-        id: skip-if-redundant
-        uses: actions/github-script@v7
-        if: steps.check-ref.outputs.enabled == 'yes'
-        with:
-          path: ./test
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            try {
-              const { data: run } = await github.rest.actions.getWorkflowRun({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                run_id: context.runId,
-              });
-              const workflow_id = run.workflow_id;
-              const head_sha = run.head_sha;
-              const tree_id = run.head_commit.tree_id;
-
-              const { data: runs } = await github.rest.actions.listWorkflowRuns({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                per_page: 500,
-                status: 'success',
-                workflow_id,
-              });
-              for (const run of runs.workflow_runs) {
-                if (head_sha === run.head_sha) {
-                  core.warning(`Successful run for the commit ${head_sha}: ${run.html_url}`);
-                  core.setOutput('enabled', ' but skip');
-                  break;
-                }
-                if (run.head_commit && tree_id === run.head_commit.tree_id) {
-                  core.warning(`Successful run for the tree ${tree_id}: ${run.html_url}`);
-                  core.setOutput('enabled', ' but skip');
-                  break;
-                }
-              }
-            } catch (e) {
-              core.warning(e);
-            }
-
-  build:
-    name: Build
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, ubuntu-22.04, ubuntu-20.04, macos-13, macos-14, macos-15, windows-latest, windows-2022, windows-2019]
-    steps:
-      - uses: actions/setup-python@v4
-        with:
-          path: ./test/text
-          python-version: '3.x'
-      - uses: actions/checkout@v4
-        with:
-          path: ./test/text
-          submodules: true
-      - name: Create Output Directory
-        run: mkdir -p out
-
-  emscripten:
-    name: Checkout -- Build
+  deploy:
+    name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
+    needs: [build, test]
     steps:
       - uses: actions/checkout@v4
         with:
           path: ./test/text
           submodules: true
           
+      - name: Build Documentation
+        run: |
+          cd ./docs
+          make html
+          
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/_build/html
+          publish_branch: gh-pages
+          
+      - name: Notify Deployment Success
+        run: echo "Deployment to GitHub Pages completed successfully!"
