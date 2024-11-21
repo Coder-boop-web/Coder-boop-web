@@ -125,13 +125,6 @@ jobs:
       - name: Create Output Directory
         run: mkdir -p out
 
-      - name: Build Project
-        run: |
-          # Add your build commands here
-          echo "Building the project..."
-          # Example build command
-          make build
-
   emscripten:
     name: Build with Emscripten
     runs-on: ubuntu-latest
@@ -156,8 +149,6 @@ jobs:
             echo "Build failed!"
             exit 1
           fi
-          mv output.js ../out/
-          mv output.wasm ../out/
 
   test:
     name: Run Tests
