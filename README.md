@@ -24,5 +24,3 @@ I genuinely enjoy supporting other developers on their journey. Whether you’re
 ## Let’s Connect!
 If you’re a developer looking to collaborate, have a project in mind, or just want to chat about all things coding, hit me up! You can reach me at my email: [conrad.cropex@hotmail.com](mailto:conrad.cropex@hotmail.com). I’d love to connect and see what we can create together.
 
-![image](https://github.com/user-attachments/assets/85b5e01f-6e50-4fe8-875e-2068ecec70f0)
-
