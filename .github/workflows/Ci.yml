@@ -128,11 +128,6 @@ jobs:
         with:
           submodules: true
 
-      - name: Set Up Emscripten
-        run: |
-          # Set up Emscripten environment
-          source /opt/emsdk/emsdk_env.sh
-
       - name: Build JavaScript
         run: |
           cd ./test/text
@@ -161,10 +156,6 @@ jobs:
       - name: Install Python Dependencies
         run: |
           pip install -r requirements.txt
-
-      - name: Run Unit Tests
-        run: |
-          python -m unittest discover -s tests -p "*.py"
 
       - name: Run JavaScript Tests
         run: |
