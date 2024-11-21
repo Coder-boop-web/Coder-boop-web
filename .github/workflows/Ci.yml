@@ -44,9 +44,6 @@ jobs:
           node-version: '16'  # Specify your Node.js version
           cache: 'npm'
 
-      - name: Install Node.js Dependencies
-        run: npm install
-
   ci-config:
     name: Configure CI Settings
     if: vars.CI_BRANCHES == '' || contains(vars.CI_BRANCHES, github.ref_name)
@@ -55,12 +52,6 @@ jobs:
       enabled: ${{ steps.check-ref.outputs.enabled }}${{ steps.skip-if-redundant.outputs.enabled }}
       skip_concurrent: ${{ steps.check-ref.outputs.skip_concurrent }}
     steps:
-      - name: Clone CI Configuration
-        run: |
-          git clone --no-tags --single-branch -b main --depth 1 --filter=blob:none https://github.com/${{ github.repository }} config-repo
-          cd config-repo
-          git checkout HEAD -- ci/config || false
-
       - id: check-ref
         name: Check CI Configuration for Reference
         run: |
