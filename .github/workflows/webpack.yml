@@ -24,5 +24,4 @@ jobs:
 
     - name: Build
       run: |
-        npm install
-        npx webpack
+        echo "this is an example workflow. Builds are sent to my gitlab repository."
