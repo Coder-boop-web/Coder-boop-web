@@ -35,8 +35,6 @@ jobs:
         with:
           source: ./
           destination: ./_root
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
 
   # Deployment job
   deploy-1:
