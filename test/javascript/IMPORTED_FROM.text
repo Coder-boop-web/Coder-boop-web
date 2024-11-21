@@ -1,0 +1,17 @@
+ALl files are imported from samdutton/simpl.
+https://github.com/samdutton/simpl/tree/gh-pages
+
+CLARIFICATION:
+
+All `Javascript` files utilized in this project are imported from the samdutton/simpl repository, which
+can be found at https://github.com/samdutton/simpl/tree/gh-pages. This repository serves as a source 
+for various resources and code that are essential for the functionality of the project.
+
+Ownership Status: It is important to note that while these files are being used in this project, they are
+not under my ownership. This means that I do not have the rights to modify, distribute, or claim these
+files as my own. The original creator, Sam Dutton, retains all rights and ownership of the content within
+the `simpl` repository.
+
+Attribution: Proper attribution should be given to the original source when utilizing these files in any
+project. This not only acknowledges the creator's efforts but also maintains transparency regarding the
+origins of the code and resources used.
