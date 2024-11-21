@@ -28,14 +28,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
+          path: ./test/text
           submodules: recursive
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
+          path: ./test
           python-version: "3.11"
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
+          path: ./test
           node-version: ${{ matrix.node }}
           architecture: ${{ matrix.arch }} 
       - uses: actions/setup-python@v5
@@ -90,6 +93,7 @@ jobs:
         uses: actions/github-script@v7
         if: steps.check-ref.outputs.enabled == 'yes'
         with:
+          path: ./test
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             try {
@@ -134,9 +138,11 @@ jobs:
     steps:
       - uses: actions/setup-python@v4
         with:
+          path: ./test/text
           python-version: '3.x'
       - uses: actions/checkout@v4
         with:
+          path: ./test/text
           submodules: true
       - name: Create Output Directory
         run: mkdir -p out
@@ -147,5 +153,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          path: ./test/text
           submodules: true
           
