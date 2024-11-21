@@ -149,6 +149,3 @@ jobs:
         with:
           submodules: true
           
-  nvminstall:
-    name: Nvm install / verify
-    runs-on: ubuntu-latest
