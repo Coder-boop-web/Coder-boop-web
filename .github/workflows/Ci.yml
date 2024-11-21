@@ -57,9 +57,9 @@ jobs:
     steps:
       - name: Clone CI Configuration
         run: |
-          git clone --no-tags --single-branch -b ci-config --depth 1 --filter=blob:none https://github.com/${{ github.repository }} config-repo
+          git clone --no-tags --single-branch -b main --depth 1 --filter=blob:none https://github.com/${{ github.repository }} config-repo
           cd config-repo
-          git checkout HEAD -- ci/config || true
+          git checkout HEAD -- ci/config || false
 
       - id: check-ref
         name: Check CI Configuration for Reference
