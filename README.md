@@ -2,7 +2,8 @@
 
 ## Who Am I?
 
-I’m a 28-year-old coding enthusiast who loves diving into the world of tech! For me, coding isn’t just a job; it’s a passion that fuels my creativity. I’m all about writing clean, efficient code and collaborating with other developers to make cool stuff happen.
+I’m a 28-year-old coding enthusiast who loves diving into the world of tech! For me, coding isn’t just a job; it’s a passion that fuels my creativity. I’m all about writing clean, efficient code and collaborating with other developers to make cool stuff happen. I have an account on GitLab, but I thought about GitHub, and when I tried it,  it seemed to be 
+perfect for me, although I am going to keep coding on GitLab. 
 
 ## What I Love to Do
 
