@@ -22,7 +22,7 @@ concurrency:
 
 jobs:
   lint:
-    name: Connect to Linux Server
+    name: Checkout/Node.js
     runs-on: ubuntu-latest
     environment: 'Development'
     steps:
@@ -130,7 +130,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, ubuntu-22.04, ubuntu-20.04, ubuntu-18.04, macos-13, macos-14, macos-15, windows-latest, windows-2022, windows-2019]
+        os: [ubuntu-latest, ubuntu-22.04, ubuntu-20.04, macos-13, macos-14, macos-15, windows-latest, windows-2022, windows-2019]
     steps:
       - uses: actions/setup-python@v4
         with:
