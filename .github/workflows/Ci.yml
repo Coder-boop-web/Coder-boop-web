@@ -38,12 +38,6 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Set Up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '16'  # Specify your Node.js version
-          cache: 'npm'
-
   ci-config:
     name: Configure CI Settings
     if: vars.CI_BRANCHES == '' || contains(vars.CI_BRANCHES, github.ref_name)
